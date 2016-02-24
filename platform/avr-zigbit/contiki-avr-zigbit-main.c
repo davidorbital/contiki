@@ -80,7 +80,7 @@ FUSES =
 		.high = (FUSE_BOOTSZ0 /*& FUSE_BOOTSZ1*/ & FUSE_SPIEN & FUSE_JTAGEN), //0x9D,
 		.extended = 0xff,
 	};
-	
+
 #if RF230BB
 #if NETSTACK_CONF_WITH_IPV6 || NETSTACK_CONF_WITH_IPV4
 //PROCINIT(&etimer_process, &tcpip_process );
@@ -96,7 +96,7 @@ PROCINIT(&etimer_process, &mac_process );
 #endif
 /* Put default MAC address in EEPROM */
 #if MY_NODE_ID
-uint8_t mac_address[8] EEMEM = {0x02, 0x11, 0x22, 0xff, 0xfe, 0x33, 0x44, 
+uint8_t mac_address[8] EEMEM = {0x02, 0x11, 0x22, 0xff, 0xfe, 0x33, 0x44,
   MY_NODE_ID};
 #else
 uint8_t mac_address[8] EEMEM = {0x02, 0x11, 0x22, 0xff, 0xfe, 0x33, 0x44, 0x55};
@@ -112,10 +112,10 @@ init_lowlevel(void)
 
   /* Redirect stdout to second port */
   rs232_redirect_stdout(RS232_PORT_1);
-  
+
   /* Clock */
   clock_init();
- 
+
  /* rtimers needed for radio cycling */
   rtimer_init();
 
@@ -123,7 +123,7 @@ init_lowlevel(void)
   process_init();
  /* etimers must be started before ctimer_init */
   process_start(&etimer_process, NULL);
-  
+
 #if RF230BB
 
   ctimer_init();
@@ -135,10 +135,10 @@ init_lowlevel(void)
   linkaddr_t addr;
   memset(&addr, 0, sizeof(linkaddr_t));
   eeprom_read_block ((void *)&addr.u8,  &mac_address, 8);
- 
+
 #if NETSTACK_CONF_WITH_IPV6
   memcpy(&uip_lladdr.addr, &addr.u8, 8);
-#endif  
+#endif
   rf230_set_pan_addr(IEEE802154_PANID, 0, (uint8_t *)&addr.u8);
 #ifdef CHANNEL_802_15_4
   rf230_set_channel(CHANNEL_802_15_4);
@@ -146,7 +146,7 @@ init_lowlevel(void)
   rf230_set_channel(26);
 #endif
 
-  linkaddr_set_node_addr(&addr); 
+  linkaddr_set_node_addr(&addr);
 
   PRINTF("MAC address %x:%x:%x:%x:%x:%x:%x:%x\n",addr.u8[0],addr.u8[1],addr.u8[2],addr.u8[3],addr.u8[4],addr.u8[5],addr.u8[6],addr.u8[7]);
 
@@ -213,3 +213,4 @@ main(void)
 
   return 0;
 }
+j
