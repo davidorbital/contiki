@@ -5,7 +5,9 @@ ifndef CONTIKI
 endif
 
 ifeq ($(TARGET),)
+  #DAVID: La variable '$(TARGET)' indica que plataforma se utilizará como target.
   -include Makefile.target
+  #DAVID: En Makefile.target solo se define el target que se ha guardado con savetarget.
   ifeq ($(TARGET),)
     ${info TARGET not defined, using target 'native'}
     TARGET=native
@@ -15,6 +17,7 @@ ifeq ($(TARGET),)
 endif
 
 ifeq ($(DEFINES),)
+  #DAVID: Igual que con los TARGETS se hace con los DEFINES.
   -include Makefile.$(TARGET).defines
   ifneq ($(DEFINES),)
     ${info using saved defines '$(DEFINES)'}
@@ -33,6 +36,7 @@ endif
 
 #More debug information when running in CI
 ifdef CI
+#DAVID: Si la variable 'CI' está a true se activa el modo 'verbose' o detallado que dará información sobre lo que hace el SO en todo momento.
   ifeq ($(CI),true)
     V = 1
   endif
@@ -46,8 +50,10 @@ targets:
 
 savetarget:
 	-@rm -f Makefile.target
+  #DAVID: Borra el archivo Makefile.target.
 	@echo "saving Makefile.target"
 	@echo >Makefile.target "TARGET = $(TARGET)"
+  #DAVID: Crea un archivo Makefile.target con la línea "TARGET = 'target-seleccionado'"
 
 savedefines:
 	-@rm -f Makefile.$(TARGET).defines
@@ -55,6 +61,7 @@ savedefines:
 	@echo >Makefile.$(TARGET).defines "DEFINES = $(DEFINES)"
 
 OBJECTDIR = obj_$(TARGET)
+#DAVID: e.g. OBJECTDIR = obj_native.
 
 LOWERCASE = -abcdefghijklmnopqrstuvwxyz
 UPPERCASE = _ABCDEFGHIJKLMNOPQRSTUVWXYZ
@@ -64,6 +71,7 @@ CFLAGS += -DCONTIKI=1 -DCONTIKI_TARGET_$(TARGET_UPPERCASE)=1
 MODULES += core/sys core/dev core/lib
 
 # Include IPv6, IPv4, and/or Rime
+#DAVID: Aquí se elige que pila de red utilizar. Por defecto está puesto que se utilice IPv6.
 
 HAS_STACK = 0
 ifeq ($(CONTIKI_WITH_IPV4),1)
