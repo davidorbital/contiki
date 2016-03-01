@@ -1,0 +1,42 @@
+CONTIKIDIRS += ${addprefix $(CONTIKI)/core/, net/mac net/mac/sicslowmac . }
+
+CONTIKI_TARGET_DIRS = . /core/net/mac/ /core/net/mac/sicslowmac/
+#DAVID: En CONTIKI_TARGET_DIRS se añaden los directorios en los que se encuentran los archivos que incluiremos en CONTIKI_TARGET_SOURCEFILES. 
+
+CONTIKI_CORE = contiki-avr-zigbit-xmega
+
+CONTIKI_TARGET_MAIN = ${CONTIKI_CORE}.o
+
+CONTIKI_TARGET_SOURCEFILES +=	rs232.c cfs-eeprom.c eeprom.c random.c mmem.c \
+				contiki-avr-zigbit-main-xmega.c \
+				sicslowmac.c linkaddr.c queuebuf.c nullmac.c packetbuf.c \
+				frame802154.c framer-802154.c framer.c nullsec.c nbr-table.c
+#DAVID: CONTIKI_TARGET_SOURCEFILES es probable que sean funcionalidades que se le añadan a la mota de manera opcional. Seguramente comience quitando casi todos e iré añadiendo según vaya probando que funcionan.
+
+CONTIKIAVR = $(CONTIKI)/cpu/avr-xmega
+
+CONTIKIBOARD = .
+
+CONTIKI_PLAT_DEFS = -DF_CPU=32768000UL -DAUTO_CRC_PADDING=2
+#DAVID: Esto está copiado de otro port al mismo micro.
+
+MCU = atxmega256a3
+
+#DAVID: Algún AVRDUDE necesitaremos
+#AVRDUDE_PROGRAMMER=avr109
+#AVRDUDE_PROGRAMMER=jtagmkii
+#DAVID: Para el USB
+#PORT = usb
+#AVRDUDE_PORT=/dev/ttyUSB0
+#AVRDUDE_OPTIONS=-V
+
+#DAVID: Para poder hacer login desde el terminal y ver que pasa en la mota?.
+#login:
+#	screen /dev/ttyUSB0 115200
+
+#DAVID: Para poder hacer upload desde el terminal y programar la mota directamente?.
+#%.upload: %.hex
+#	avrdude $(AVRDUDE_OPTIONS) -p $(MCU) -P $(PORT) $(AVRDUDE_PROGRAMMER) -U flash:w:$<:a
+
+include $(CONTIKIAVR)/Makefile.avr
+include $(CONTIKIAVR)/radio/Makefile.radio
